@@ -27,15 +27,14 @@ def createC1(dataSet):
 # 计算所有项集的支持度
 def scanD(D, Ck, minSupport):
     ssCnt = {}
-    numItems = 0
+    D = list(D)
+    Ck = list(Ck)
     for tid in D:
-        numItems += 1
         for can in Ck:
             if can.issubset(tid):
                 ssCnt[can] = ssCnt.get(can,0) + 1
-    numItems = float(numItems)
-    print(ssCnt)
-    print(numItems)
+
+    numItems = float(len(D))
     retList = []
     supportData = {}
     for key in ssCnt:
@@ -50,13 +49,15 @@ def aprioriGen(Lk, k):
     retList = []  # 创建空列表
     lenLk = len(Lk)  # 计算LK中像素的个数
     for i in range(lenLk):
+        print(list(Lk[i]))
+        print(list(Lk[i])[:k - 2])
         for j in range(i + 1, lenLk):
             L1 = list(Lk[i])[:k - 2];
             L2 = list(Lk[j])[:k - 2]
             L1.sort();
             L2.sort()
-            if L1 == L2:  # 如果前面K-2个元素都相等
-                retList.append(Lk[i] | Lk[j])  # 合并
+            # if L1 == L2:  # 如果前面K-2个元素都相等
+            #     retList.append(Lk[i] | Lk[j])  # 合并
     return retList
 
 # 关联主调用程序
@@ -64,11 +65,12 @@ def apriori(dataSet, minSupport=0.5):
     C1 = createC1(dataSet)
     D = map(set, dataSet)
     L1, supportData = scanD(D, C1, minSupport)
-    L = [L1]
+    L = L1
     k = 2
     while (len(L[k - 2]) > 0):
-        Ck = aprioriGen(L[k - 2], k)
+        Ck = aprioriGen(L, k)
         Lk, supK = scanD(D, Ck, minSupport)
+        print(Lk)
         supportData.update(supK)
         L.append(Lk)
         k += 1
