@@ -26,8 +26,6 @@ def createC1(dataSet):
 
 # 计算所有项集的支持度
 def scanD(D, Ck, minSupport):
-    print(list(D)[:2])
-    print(list(Ck)[:2])
     ssCnt = {}
     for tid in D:
         for can in Ck:
@@ -37,7 +35,6 @@ def scanD(D, Ck, minSupport):
                 else:
                     ssCnt[can] += 1
     numItems = float(len(D))
-    print(ssCnt)
     retList = []
     supportData = {}
     for key in ssCnt:

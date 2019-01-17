@@ -29,11 +29,20 @@ def scanD(D, Ck, minSupport):
     ssCnt = {}
     D = list(D)
     Ck = list(Ck)
+    print(f'[32][{len(Ck)}]{Ck}')
     for tid in D:
         for can in Ck:
+            if len(can) > 1:
+                print(can)
+
+    for tid in D:
+        for can in Ck:
+            if len(can) > 1:
+                print(can)
+                print('-'*70)
             if can.issubset(tid):
                 ssCnt[can] = ssCnt.get(can,0) + 1
-
+    print(ssCnt)
     numItems = float(len(D))
     retList = []
     supportData = {}
@@ -45,19 +54,12 @@ def scanD(D, Ck, minSupport):
     return retList, supportData
 
 # 创建候选项集CK
-def aprioriGen(Lk, k):
+def aprioriGen(Lk, k=2):
     retList = []  # 创建空列表
     lenLk = len(Lk)  # 计算LK中像素的个数
-    for i in range(lenLk):
-        print(list(Lk[i]))
-        print(list(Lk[i])[:k - 2])
-        for j in range(i + 1, lenLk):
-            L1 = list(Lk[i])[:k - 2];
-            L2 = list(Lk[j])[:k - 2]
-            L1.sort();
-            L2.sort()
-            # if L1 == L2:  # 如果前面K-2个元素都相等
-            #     retList.append(Lk[i] | Lk[j])  # 合并
+    import itertools
+    for L in itertools.combinations(Lk,k):
+        retList.append(L)
     return retList
 
 # 关联主调用程序
@@ -69,11 +71,11 @@ def apriori(dataSet, minSupport=0.5):
     k = 2
     while (len(L[k - 2]) > 0):
         Ck = aprioriGen(L, k)
+        # print(f'[66]{Ck}')
         Lk, supK = scanD(D, Ck, minSupport)
-        print(Lk)
         supportData.update(supK)
         L.append(Lk)
-        k += 1
+        break
     return L, supportData
 
 # 创建关联规则
