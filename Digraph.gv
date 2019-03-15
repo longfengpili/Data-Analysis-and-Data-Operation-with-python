@@ -1,0 +1,6 @@
+digraph {
+	node [fontname=SimSun shape=box]
+	edge [fontname=SimHei fontsize=11]
+	a
+	b
+}
